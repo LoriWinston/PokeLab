@@ -1,42 +1,45 @@
 import { getPokeStats } from '../localStorageUtils.js';
+import { makeLabelsArray, makeSeenArray, makeCaughtArray } from './mungeUtils.js';
+
+var ctx = document.getElementById('myChart').getContext('2d');
 
 const pokeStats = getPokeStats();
 
 
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, { //eslint-disable-line 
+var myChart = new Chart(ctx, { // eslint-disable-line
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of times seen',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }
+        labels: makeLabelsArray(pokeStats), // LABELS ARRAY GOES HERE
+        datasets: [
+            {
+                label: '# of times seen',
+                data: makeSeenArray(pokeStats), // DATA ARRAY GOES HERE
+                backgroundColor: 'purple',
+                borderColor: 'black',
+                borderWidth: 5
+            },
+            {
+                label: '# of times caught',
+                data: makeCaughtArray(pokeStats), // DATA ARRAY GOES HERE
+                backgroundColor: 'green',
+                borderColor: 'black',
+                borderWidth: 5
+            },
         ]
-    
     },
     options: {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }],
+            // create x axis with step size 1 to show integers instead of ugly decimals
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
                 }
             }]
         }
